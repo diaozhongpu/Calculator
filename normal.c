@@ -1,3 +1,5 @@
+//new normal
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
@@ -11,10 +13,11 @@ void Normal()
 	double *ptinputnum=&inputnum, *ptresult=&result, *pta=&a, *ptb=&b;
 	char *ptinputchar,*ptcurchar;
 	int ifnum=0,ifpoint=0,ifinput=1;
-	Stack Number, Character, Output;
+	Stack Number, Character;
+	List Output;
 	Number=NewStack();
 	Character=NewStack();
-	Output=NewStack();
+	Output=NewList();
 		
 	getchar();
 	printf("Please input:");
@@ -44,7 +47,7 @@ void Normal()
 						}
 						else
 						{
-							Push(Output,ptcurchar,1);
+							Add(Output,ptcurchar,1);
 						}
 					}
 					Push(Character,ptinputchar,1);
@@ -71,10 +74,10 @@ void Normal()
 						}
 						else
 						{
-							Push(Output,ptcurchar,1);
+							Add(Output,ptcurchar,1);
 						}
 					}
-					//Push(Character,ptinputchar,1);
+					Push(Character,ptinputchar,1);
 				}
 				ifnum=0;
 				break;
@@ -98,7 +101,7 @@ void Normal()
 						}
 						else
 						{
-							Push(Output,ptcurchar,1);
+							Add(Output,ptcurchar,1);
 						}
 					}
 				}
@@ -109,10 +112,10 @@ void Normal()
 			{			
 			case '0': case '1': case '2': case '3': case '4':
 			case '5': case '6': case '7': case '8': case '9':
-				ptinputnum=(int*)malloc(sizeof(int)); 
+				ptinputnum=(double*)malloc(sizeof(double)); 
 				if(ifnum)
 				{
-					ptinputnum=Pop(Number);
+					ptinputnum=Take(Output);
 					if(ifpoint<0)
 					{
 						*ptinputnum+=(*ptinputchar-'0')*pow(10,ifpoint);
@@ -122,19 +125,20 @@ void Normal()
 					{
 						*ptinputnum=10*(*ptinputnum)+(*ptinputchar-'0');
 					}
-					Push(Number,ptinputnum,0);
+					Add(Output,ptinputnum,0);
 				}
 				else
 				{
 					*ptinputnum=(*ptinputchar-'0');
-					Push(Number,ptinputnum,0);
+					Add(Output,ptinputnum,0);
+					printf("Stack: %lf",*(double*)ptinputnum);
 				}
 				free(ptinputchar);
 				ifnum=1;
 				break;
 				
 			case '.': 
-				ptinputnum=(int*)malloc(sizeof(int));
+				ptinputnum=(double*)malloc(sizeof(double));
 				if(ifpoint)
 				{
 					;
@@ -148,7 +152,7 @@ void Normal()
 					else
 					{
 						*ptinputnum=0;
-						Push(Number,ptinputnum,0);
+						Add(Output,ptinputnum,0);
 						ifnum=1;
 						ifpoint=-1;
 					}
@@ -165,6 +169,12 @@ void Normal()
 
 			
 			case '\n': 
+				while(!IsEmpty(Character))
+				{
+					ptinputchar=(char*)malloc(sizeof(char)); 
+					ptinputchar=Pop(Character);
+					Add(Output,ptinputchar,1);
+				}
 				ifinput=0;	//end the input
 				break;
 			
@@ -175,75 +185,77 @@ void Normal()
 		
 	}
 
-	
-	//PrintStack(Number);
-	//PrintStack(Character);
-	PrintStack(Output);
-	
-	
-	
-	
-	
+
+
+	//PrintList(Output); 
 	
 	
 	//Calculate
-	// Stack output			*ptresult=&result
-/*	ptinputchar=(char*)malloc(sizeof(char)); 
-	while(!IsEmpty(Output))
+	Number=NewStack();
+	Character=NewStack();
+	
+	ptinputchar=(char*)malloc(sizeof(char)); 
+		printf("2+++");
+	while(!IsEmptyL(Output))
 	{
-		ptinputnum=(int*)malloc(sizeof(int)); 
-		if(Output->type)			//1, character
+		ptinputnum=(double*)malloc(sizeof(double)); 
+		printf("@@");
+		if(Output->head->type)			//1, character
 		{
-			ptinputchar=Pop(Output);
-			switch(*ptinputchar)
+			ptinputchar=Take(Output);
+			printf("Pro1: %d",ptinputnum);
+			printf("+++");
+			switch(*(char*)ptinputchar)
 			{
 				case '+': 
 					pta=Pop(Number);
 					ptb=Pop(Number);
 					*ptinputnum=*pta+*ptb;
 					Push(Number, ptinputnum, 0);
+					printf("IN: %d",ptinputnum);
 					break;
 				case '-': 
 					pta=Pop(Number);
 					ptb=Pop(Number);
-					*ptinputnum=*pta+*ptb;
+					*ptinputnum=*pta-*ptb;
 					Push(Number, ptinputnum, 0);
 					break;
 				case '*': 
 					pta=Pop(Number);
 					ptb=Pop(Number);
-					*ptinputnum=*pta+*ptb;
+					*ptinputnum=(*pta)*(*ptb);
 					Push(Number, ptinputnum, 0);
 					break;
 				case '/': 
 					pta=Pop(Number);
 					ptb=Pop(Number);
-					*ptinputnum=*pta+*ptb;
+					*ptinputnum=(*pta)/(*ptb);
 					Push(Number, ptinputnum, 0);
 					break;
+				default: 
+					printf("WRONG!"); 
+					break;
 			}
-			Output=Output->next;
+			//Output->head=Output->head->next;
 		}
 		else
 		{
-			ptinputnum=Pop(Output);
+			printf("---");
+			ptinputnum=(double*)Take(Output);
+			printf("add to output: %lf",*(double*)ptinputnum);
 			Push(Number, ptinputnum, 0);
-			
-			
+			printf("Pro: %d",ptinputnum);
+			//Output->head=Output->head->next;
 		}
-		s
+		
 	
 	}
-*/		
-	if(!IsEmpty(Number))
-	{
-		printf("Error");
-	}
-	else
-	{
-		ptresult=Pop(Number);
-		printf("Answer: %lf",*ptresult);
-	}
+	
+	printf("Answer: %d",ptresult);
+	ptresult=(double*)Pop(Number);
+	printf("Answer: %d",ptresult);
+	printf("Answer: %lf",*(double*)ptresult);
+	
 	
 }
 
@@ -281,12 +293,10 @@ void Push(Stack S, void *ele, int type)
 	//Stack Temp;
 	Temp=NewStack();
 	Temp->obj=ele;
-	printf("[$$%d]",Temp->obj);
 	Temp->next=S->next;
-	printf("[$$%d]",Temp->next);
+	Temp->type=type;
 	S->next=Temp;
-
-	
+		
 }
 
 int IsEmpty(Stack S)
@@ -342,5 +352,89 @@ void PrintStack(Stack S)
 		
 	}
 	*/
+	
+}
+
+List NewList(void)
+{
+	List L;
+	L=(List)malloc(sizeof(struct linkedlist));
+	L->head=NULL;
+	L->tail=NULL;
+	return L;
+}
+
+void *Take(List L)
+{
+	void * ele;
+/*	if(IsEmptyL(L))
+	{
+		printf("Empty!");
+		return NULL;
+	}
+	else
+	{*/
+		ele=L->head->obj;
+		L->head=L->head->next;
+//	}
+	return ele;
+}
+
+void Add(List L, void *ele, int type)
+{
+	Temp=NewStack(); 
+	Temp->obj=ele;
+	Temp->type=type; 
+	Temp->next=NULL;
+	if(IsEmptyL(L))
+	{
+		L->head=Temp;
+		L->tail=Temp;
+	}
+	else
+	{
+		if(L->head->next==NULL)
+		{
+			L->head->next=L->tail;
+		}
+		L->tail->next=Temp;
+		L->tail=Temp;
+	}
+	
+}
+
+int IsEmptyL(List L)
+{
+	return L->head==NULL;
+}
+
+void Delete(List L)
+{
+	void * temp;
+	while(!IsEmptyL(L))
+	{
+		temp=L->head;
+		L->head=L->head->next;
+		free(temp); 
+	}
+}
+
+void PrintList(List L)
+{
+	int type;
+	while(!IsEmptyL(L))
+	{
+		type=L->head->type;	
+		if(type)
+		{
+			printf("[!%c]",*(char*)L->head->obj);
+		}
+		else
+		{
+			printf("[!%lf]",*(double*)L->head->obj);
+		}
+		L->head=L->head->next;
+	}
+	
 	
 }
