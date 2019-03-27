@@ -34,7 +34,9 @@ struct linkedlist
 
 List NewList(void);
 void *Take(List L);
+void *TakeTail(List L);
 void Add(List L, void *ele, int type);
+void AddTail(List L, void *ele, int type);
 int IsEmptyL(List L);
 void Delete(List L);
 void PrintList(List L);

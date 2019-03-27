@@ -9,6 +9,7 @@ Stack Temp;
 
 void Normal()
 {
+	int i=0;
 	double inputnum, result=999, a, b;
 	double *ptinputnum=&inputnum, *ptresult=&result, *pta=&a, *ptb=&b;
 	char *ptinputchar,*ptcurchar;
@@ -54,6 +55,7 @@ void Normal()
 				}
 				printf("[+]");
 				ifnum=0;
+				ifpoint=0;
 				break;
 			case '*': case '/': 
 				if(IsEmpty(Character))
@@ -80,10 +82,12 @@ void Normal()
 					Push(Character,ptinputchar,1);
 				}
 				ifnum=0;
+				ifpoint=0;
 				break;
 			case '(': 
 				Push(Character,ptinputchar,1);
 				ifnum=0;
+				ifpoint=0;
 				break;
 			case ')': 
 				if(IsEmpty(Character))
@@ -106,6 +110,7 @@ void Normal()
 					}
 				}
 				ifnum=0;
+				ifpoint=0;
 				break;
 			
 			//input numbers case 0~9, '.'
@@ -115,7 +120,7 @@ void Normal()
 				ptinputnum=(double*)malloc(sizeof(double)); 
 				if(ifnum)
 				{
-					ptinputnum=Take(Output);
+					ptinputnum=TakeTail(Output);
 					if(ifpoint<0)
 					{
 						*ptinputnum+=(*ptinputchar-'0')*pow(10,ifpoint);
@@ -123,9 +128,12 @@ void Normal()
 					}
 					else
 					{
-						*ptinputnum=10*(*ptinputnum)+(*ptinputchar-'0');
+						printf("Position:%d",ptinputnum);
+						printf("BeforePack: %lf",*(double*)ptinputnum);
+						*ptinputnum=10.0*(*ptinputnum)+(double)(*ptinputchar-'0');
+						printf("Pack: %lf; %d times",*(double*)ptinputnum,i++);
 					}
-					Add(Output,ptinputnum,0);
+					AddTail(Output,ptinputnum,0);
 				}
 				else
 				{
@@ -229,7 +237,7 @@ void Normal()
 				case '/': 
 					pta=Pop(Number);
 					ptb=Pop(Number);
-					*ptinputnum=(*pta)/(*ptb);
+					*ptinputnum=(*ptb)/(*pta);
 					Push(Number, ptinputnum, 0);
 					break;
 				default: 
@@ -261,7 +269,7 @@ void Normal()
 
 
 
-Stack NewStack(void)
+static Stack NewStack(void)
 {
 	Stack S;
 	S=(Stack)malloc(sizeof(struct node));
@@ -269,7 +277,7 @@ Stack NewStack(void)
 	return S;
 }
 
-void *Pop(Stack S)
+static void *Pop(Stack S)
 {
 	printf("[pop]");
 	void *ele;
@@ -287,7 +295,7 @@ void *Pop(Stack S)
 	return ele;
 }
 
-void Push(Stack S, void *ele, int type)
+static void Push(Stack S, void *ele, int type)
 {
 	printf("[push]");
 	//Stack Temp;
@@ -299,12 +307,12 @@ void Push(Stack S, void *ele, int type)
 		
 }
 
-int IsEmpty(Stack S)
+static int IsEmpty(Stack S)
 {
 	return S->next==NULL;	
 }
 
-void DisposeStack(Stack S)
+static void DisposeStack(Stack S)
 {
 	while(!IsEmpty(S))
 	{
@@ -312,7 +320,7 @@ void DisposeStack(Stack S)
 	}
 }
 
-void *TopEle(Stack S)
+static void *TopEle(Stack S)
 {
 	Stack Top;
 	if(IsEmpty(S))
@@ -330,7 +338,7 @@ void *TopEle(Stack S)
 }
 
 
-void PrintStack(Stack S)
+static void PrintStack(Stack S)
 {
 	;
 	/*
@@ -355,7 +363,7 @@ void PrintStack(Stack S)
 	
 }
 
-List NewList(void)
+static List NewList(void)
 {
 	List L;
 	L=(List)malloc(sizeof(struct linkedlist));
@@ -364,7 +372,7 @@ List NewList(void)
 	return L;
 }
 
-void *Take(List L)
+static void *Take(List L)
 {
 	void * ele;
 /*	if(IsEmptyL(L))
@@ -380,7 +388,15 @@ void *Take(List L)
 	return ele;
 }
 
-void Add(List L, void *ele, int type)
+static void *TakeTail(List L)
+{
+	void * ele;
+	ele=L->tail->obj;
+	return ele;
+	
+}
+
+static void Add(List L, void *ele, int type)
 {
 	Temp=NewStack(); 
 	Temp->obj=ele;
@@ -403,12 +419,17 @@ void Add(List L, void *ele, int type)
 	
 }
 
-int IsEmptyL(List L)
+static void AddTail(List L, void *ele, int type)
+{
+	L->tail->obj=ele;
+}
+
+static int IsEmptyL(List L)
 {
 	return L->head==NULL;
 }
 
-void Delete(List L)
+static void Delete(List L)
 {
 	void * temp;
 	while(!IsEmptyL(L))
@@ -419,7 +440,7 @@ void Delete(List L)
 	}
 }
 
-void PrintList(List L)
+static void PrintList(List L)
 {
 	int type;
 	while(!IsEmptyL(L))
@@ -438,3 +459,4 @@ void PrintList(List L)
 	
 	
 }
+

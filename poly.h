@@ -2,34 +2,34 @@
 #define _poly_h
 
 //linked list implementation of stakes
-struct node;
-typedef struct node *ptr;
+struct polynode;
+typedef struct polynode *ptpn;
 
-struct node
+struct polynode
 {
 	double coefficient;
 	double time;
-	ptr next;
+	ptpn next;
 };
 
 
-typedef struct linkedlist *List;
-struct linkedlist
+typedef struct linkedlistp *Listp;
+struct linkedlistp
 {
-	ptr head;
-	ptr tail;
+	ptpn head;
+	ptpn tail;
 };
 
-ptr NewNode(void);
-List NewList(void);
-ptr Take(List L);
-void AddByTime(List L, double coefficient, double time);
-int IsEmptyL(List L);
-void Delete(List L);
-void PrintPoly(List L);
+ptpn NewNode(void);
+Listp NewListp(void);
+ptpn Takep(Listp L);
+void AddByTime(Listp L, double coefficient, double time);
+int IsEmptyLp(Listp L);
+void Deletep(Listp L);
+void PrintPoly(Listp L);
 
 void Poly(void);
-List MultiPoly(List Poly1, List Poly2);
+Listp MultiPoly(Listp Poly1, Listp Poly2);
 
 
 #endif

@@ -9,9 +9,9 @@ void Poly()
 		//1 for out(c,t), 2 for take coefficient, 3 for time, 0 to quit.
 	char input;
 	double coefficient=0,time=0;
-	List Poly1, Poly2, Result;
+	Listp Poly1, Poly2, Result;
 	
-	Poly1=NewList();
+	Poly1=NewListp();
 	printf("Please enter the first polynomial:");
 	getchar(); 
 	while(mode)
@@ -54,7 +54,7 @@ void Poly()
 	
 	
 	
-	Poly2=NewList();
+	Poly2=NewListp();
 	printf("\nPlease enter the second polynomial:");
 	mode=1;
 	coefficient=0;
@@ -105,38 +105,38 @@ void Poly()
 
 
 
-ptr NewNode(void)
+ptpn NewNode(void)
 {
-	ptr p;
-	p=(ptr)malloc(sizeof(struct node));
+	ptpn p;
+	p=(ptpn)malloc(sizeof(struct polynode));
 	p->next=NULL;
 	p->coefficient=0;
 	p->time=0;
 	return p;	
 }
 
-List NewList(void)
+Listp NewListp(void)
 {
-	List L;
-	L=(List)malloc(sizeof(struct linkedlist));
+	Listp L;
+	L=(Listp)malloc(sizeof(struct linkedlistp));
 	L->head=NULL;
 	L->tail=NULL;
 	return L;
 }
 
-ptr Take(List L)
+ptpn Takep(Listp L)
 {
-	ptr ele;
+	ptpn ele;
 	ele=L->head;
 	L->head=L->head->next;
 	return ele;
 }
 
-void AddByTime(List L, double coefficient, double time)
+void AddByTime(Listp L, double coefficient, double time)
 {
-	ptr fore, back, add;
+	ptpn fore, back, add;
 	add=NewNode();
-	if(IsEmptyL(L))
+	if(IsEmptyLp(L))
 	{
 		add->coefficient=coefficient;
 		add->time=time;
@@ -202,15 +202,15 @@ void AddByTime(List L, double coefficient, double time)
 	}
 }
 
-int IsEmptyL(List L)
+int IsEmptyLp(Listp L)
 {
 	return L->head==NULL;
 }
 
-void Delete(List L)
+void Deletep(Listp L)
 {
 	void * temp;
-	while(!IsEmptyL(L))
+	while(!IsEmptyLp(L))
 	{
 		temp=L->head;
 		L->head=L->head->next;
@@ -218,15 +218,15 @@ void Delete(List L)
 	}
 }
 
-void PrintPoly(List L)
+void PrintPoly(Listp L)
 {
-	List Temp=L;
-	while(!IsEmptyL(L))
+	Listp Temp=L;
+	while(!IsEmptyLp(L))
 	{
 		printf("%lf",L->head->coefficient);
 		printf("x^%lf",L->head->time);
 		L->head=L->head->next;
-		if(!IsEmptyL(L))
+		if(!IsEmptyLp(L))
 		{
 			printf("+");
 		}
@@ -236,12 +236,12 @@ void PrintPoly(List L)
 }
 
 
-List MultiPoly(List Poly1, List Poly2)
+Listp MultiPoly(Listp Poly1, Listp Poly2)
 {
-	ptr node1, node2, t;
-	ptr *temp;
-	List Result;
-	Result=NewList();
+	ptpn node1, node2, t;
+	ptpn *temp;
+	Listp Result;
+	Result=NewListp();
 	node1=Poly1->head;
 	while(!(node1==NULL))
 	{
