@@ -1,35 +1,74 @@
-//new normal
+/*
+ * File:normal.c the code for a normal cauculator.
+ */
 
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
 #include"normal.h"
 
-Stack Temp;
 
 void Normal()
 {
 	int i=0;
-	double inputnum, result=999, a, b;
+	double inputnum, result, a, b;
 	double *ptinputnum=&inputnum, *ptresult=&result, *pta=&a, *ptb=&b;
-	char *ptinputchar,*ptcurchar;
+			/*
+			 *  pointer to store input number or number in storage
+			 */
+	char inputchar, curchar;
+	char *ptinputchar=&inputchar,*ptcurchar=&curchar;
+			/*
+			 * pointer to the input character
+			 */
 	int ifnum=0,ifpoint=0,ifinput=1;
+			/* ifnum: 0=last input is not number, 1= last input is a number,
+			 * which indicate that if this time the input is also a number, it
+			 * should be merged into the previous one.
+			 * ifpoint: when the program is reading in a number,  0=it does not
+			 * come across the fractional part, and 1 vice versa
+			 * ifinput: 1=there still input to be read, be set to 0 when a '\n'
+			 * is read in.
+			 */
 	Stack Number, Character;
+			/*
+			 * The Stack used to tempararily store input Number and Character
+			 * before all of them is passed to the Output List.
+			 */
 	List Output;
-	Number=NewStack();
+			/*
+			 * The List used to store output reverse Polish expression.
+			 */
 	Character=NewStack();
 	Output=NewList();
+			/*
+			 * Initialize the Stack and List.
+			 */
 		
 	getchar();
+			/*
+			 * Omit the excess '\n' in the input stream.
+			 */
 	printf("Please input:");
 	while(ifinput)
+			/*
+			 * Tthe code will be executed if there are still input.
+			 */
 	{
 		ptinputchar=(char*)malloc(sizeof(char)); 
 		scanf("%c",ptinputchar);
-		//printf("%c",*ptinputchar);
 		switch(*ptinputchar)
 		{
 			case '+': case '-':
+			/*
+			 * Execute when '+' or '-' is taken in
+			 * When no previous operator is stored in Character Stack,
+			 * it will pop two numbers in the Number Stack, and store them in
+			 * the output correspondingly. Meaning the '+'/'-' operator will 
+			 * act on them. 
+			 * Otherwise, the operator with higher precedence will be precess
+			 * first.
+			 */
 				if(IsEmpty(Character))
 				{
 					printf("[if]");
@@ -58,6 +97,10 @@ void Normal()
 				ifpoint=0;
 				break;
 			case '*': case '/': 
+			/*
+			 * Execute when '*' or '/' is taken in.
+			 * Similiar to case '+' and case '/'.
+			 */
 				if(IsEmpty(Character))
 				{
 					printf("[if*]");
@@ -90,6 +133,10 @@ void Normal()
 				ifpoint=0;
 				break;
 			case ')': 
+			/*
+			 * Execute when ')' is taken in.
+			 * '(' will only pair with '('
+			 */
 				if(IsEmpty(Character))
 				{
 					;
@@ -113,10 +160,19 @@ void Normal()
 				ifpoint=0;
 				break;
 			
-			//input numbers case 0~9, '.'
+			
 			{			
 			case '0': case '1': case '2': case '3': case '4':
 			case '5': case '6': case '7': case '8': case '9':
+			/*
+			 * Execute when a number is taken in.
+			 * When no previous operator is stored in Character Stack,
+			 * it will pop two numbers in the Number Stack, and store them in
+			 * the output correspondingly. Meaning the '+'/'-' operator will 
+			 * act on them. 
+			 * Otherwise, the operator with higher precedence will be precess
+			 * first.
+			 */
 				ptinputnum=(double*)malloc(sizeof(double)); 
 				if(ifnum)
 				{
@@ -169,7 +225,7 @@ void Normal()
 			}
 			
 			
-					//functions			
+			/*
 			case 's':
 				ptinputnum=(double*)malloc(sizeof(double));
 				if(ifnum)
@@ -226,6 +282,7 @@ void Normal()
 					Add(Output,ptinputnum,0);
 				}
 
+			*/
 			
 			case '\n': 
 				while(!IsEmpty(Character))
@@ -234,36 +291,26 @@ void Normal()
 					ptinputchar=Pop(Character);
 					Add(Output,ptinputchar,1);
 				}
-				ifinput=0;	//end the input
+				ifinput=0;
+					/*
+					 * set ifinput to 0 to end the input.
+					 */
 				break;
-			
-			
-			
 		}
-		
-		
 	}
 
+	DisposeStack(Character);
 
-
-	//PrintList(Output); 
-	
-	
-	//Calculate
 	Number=NewStack();
 	Character=NewStack();
 	
 	ptinputchar=(char*)malloc(sizeof(char)); 
-		printf("2+++");
 	while(!IsEmptyL(Output))
 	{
 		ptinputnum=(double*)malloc(sizeof(double)); 
-		printf("@@");
-		if(Output->head->type)			//1, character
+		if(Output->head->type)
 		{
 			ptinputchar=Take(Output);
-			printf("Pro1: %d",ptinputnum);
-			printf("+++");
 			switch(*(char*)ptinputchar)
 			{
 				case '+': 
@@ -271,7 +318,6 @@ void Normal()
 					ptb=Pop(Number);
 					*ptinputnum=*pta+*ptb;
 					Push(Number, ptinputnum, 0);
-					printf("IN: %d",ptinputnum);
 					break;
 				case '-': 
 					pta=Pop(Number);
@@ -288,14 +334,20 @@ void Normal()
 				case '/': 
 					pta=Pop(Number);
 					ptb=Pop(Number);
-					*ptinputnum=(*ptb)/(*pta);
-					Push(Number, ptinputnum, 0);
+					if(*pta)
+					{
+						*ptinputnum=(*ptb)/(*pta);
+						Push(Number, ptinputnum, 0);
+					}
+					else
+					{
+						printf("Cannot divided by ZERO!");
+					}
 					break;
 				default: 
 					printf("WRONG!"); 
 					break;
 			}
-			//Output->head=Output->head->next;
 		}
 		else
 		{
@@ -304,23 +356,21 @@ void Normal()
 			printf("add to output: %lf",*(double*)ptinputnum);
 			Push(Number, ptinputnum, 0);
 			printf("Pro: %d",ptinputnum);
-			//Output->head=Output->head->next;
-		}
-		
-	
+		}	
 	}
 	
-	printf("Answer: %d",ptresult);
 	ptresult=(double*)Pop(Number);
-	printf("Answer: %d",ptresult);
 	printf("Answer: %lf",*(double*)ptresult);
 	
-	
+	DisposeStack(Character);
+	DisposeStack(Number);
+	Delete(Output);
+
 }
 
 
 
-static Stack NewStack(void)
+Stack NewStack(void)
 {
 	Stack S;
 	S=(Stack)malloc(sizeof(struct node));
@@ -328,16 +378,14 @@ static Stack NewStack(void)
 	return S;
 }
 
-static void *Pop(Stack S)
+void *Pop(Stack S)
 {
-	printf("[pop]");
+	Stack Temp;
 	void *ele;
-	//Stack Temp;
 	if(IsEmpty(S))
 	{
 		printf("Empty");
 		return NULL;
-		//Empty Stack
 	}
 	Temp=S->next;
 	ele=Temp->obj;
@@ -346,10 +394,9 @@ static void *Pop(Stack S)
 	return ele;
 }
 
-static void Push(Stack S, void *ele, int type)
+void Push(Stack S, void *ele, int type)
 {
-	printf("[push]");
-	//Stack Temp;
+	Stack Temp;
 	Temp=NewStack();
 	Temp->obj=ele;
 	Temp->next=S->next;
@@ -358,12 +405,12 @@ static void Push(Stack S, void *ele, int type)
 		
 }
 
-static int IsEmpty(Stack S)
+int IsEmpty(Stack S)
 {
 	return S->next==NULL;	
 }
 
-static void DisposeStack(Stack S)
+void DisposeStack(Stack S)
 {
 	while(!IsEmpty(S))
 	{
@@ -371,13 +418,12 @@ static void DisposeStack(Stack S)
 	}
 }
 
-static void *TopEle(Stack S)
+void *TopEle(Stack S)
 {
 	Stack Top;
 	if(IsEmpty(S))
 	{
 		return NULL;
-		//Empty Stack
 	}
 	else
 	{
@@ -389,32 +435,7 @@ static void *TopEle(Stack S)
 }
 
 
-static void PrintStack(Stack S)
-{
-	;
-	/*
-	while(IsEmpty(S))
-	{
-		printf("[printf]");
-		S=S->next;
-		if(S->type)
-		{
-			printf("[printf]");
-			printf("%c",*((char*)S->obj));
-		}
-		else
-		{
-			printf("[print1f]");
-			printf("[%lf]",*(double*)S->obj);
-		}
-		
-		
-	}
-	*/
-	
-}
-
-static List NewList(void)
+List NewList(void)
 {
 	List L;
 	L=(List)malloc(sizeof(struct linkedlist));
@@ -423,23 +444,15 @@ static List NewList(void)
 	return L;
 }
 
-static void *Take(List L)
+void *Take(List L)
 {
 	void * ele;
-/*	if(IsEmptyL(L))
-	{
-		printf("Empty!");
-		return NULL;
-	}
-	else
-	{*/
-		ele=L->head->obj;
-		L->head=L->head->next;
-//	}
+	ele=L->head->obj;
+	L->head=L->head->next;
 	return ele;
 }
 
-static void *TakeTail(List L)
+void *TakeTail(List L)
 {
 	void * ele;
 	ele=L->tail->obj;
@@ -447,8 +460,9 @@ static void *TakeTail(List L)
 	
 }
 
-static void Add(List L, void *ele, int type)
+void Add(List L, void *ele, int type)
 {
+	Stack Temp;
 	Temp=NewStack(); 
 	Temp->obj=ele;
 	Temp->type=type; 
@@ -470,17 +484,17 @@ static void Add(List L, void *ele, int type)
 	
 }
 
-static void AddTail(List L, void *ele, int type)
+void AddTail(List L, void *ele, int type)
 {
 	L->tail->obj=ele;
 }
 
-static int IsEmptyL(List L)
+int IsEmptyL(List L)
 {
 	return L->head==NULL;
 }
 
-static void Delete(List L)
+void Delete(List L)
 {
 	void * temp;
 	while(!IsEmptyL(L))
@@ -490,24 +504,3 @@ static void Delete(List L)
 		free(temp); 
 	}
 }
-
-static void PrintList(List L)
-{
-	int type;
-	while(!IsEmptyL(L))
-	{
-		type=L->head->type;	
-		if(type)
-		{
-			printf("[!%c]",*(char*)L->head->obj);
-		}
-		else
-		{
-			printf("[!%lf]",*(double*)L->head->obj);
-		}
-		L->head=L->head->next;
-	}
-	
-	
-}
-

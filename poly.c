@@ -1,3 +1,7 @@
+/*
+ * File:poly.c the code for the cauculation of polynomials.
+ */
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
@@ -6,11 +10,22 @@
 void Poly()
 {
 	int mode=1;
-		//1 for out(c,t), 2 for take coefficient, 3 for time, 0 to quit.
+		/*
+		 * Mark the input position.
+		 * =1 when we are out of the pair (coefficient, time),
+		 * =2 when taking coefficient, =3 when taking time, 
+		 * =0 to quit.
+		 */
 	char input;
 	double coefficient=0,time=0;
 	Listp Poly1, Poly2, Result;
+		/*
+		 * list to store polynomial
+		 */
 	
+	/*
+	 * read the input of the first polynomial and store it in a listed list
+	 */
 	Poly1=NewListp();
 	printf("Please enter the first polynomial:");
 	getchar(); 
@@ -50,12 +65,13 @@ void Poly()
 			
 		}
 	}
-	//PrintPoly(Poly1);
 	
 	
-	
+	/*
+	 * read the input of the second polynomial and store it in a listed list
+	 */
 	Poly2=NewListp();
-	printf("\nPlease enter the second polynomial:");
+	printf("Please enter the second polynomial:");
 	mode=1;
 	coefficient=0;
 	time=0;
@@ -95,10 +111,13 @@ void Poly()
 			
 		}
 	}
-	//PrintPoly(Poly2);	
 
 
 	Result=MultiPoly(Poly1,Poly2);
+		/*
+		 * Multiply two of the polynomials and store the result in
+		 * the Result listed list ADT.
+		 */
 	PrintPoly(Result);
 	
 }
