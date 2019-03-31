@@ -226,6 +226,7 @@ void Normal()
 			
 			
 			/*
+			The part supportting function still needs fixing.
 			case 's':
 				ptinputnum=(double*)malloc(sizeof(double));
 				if(ifnum)

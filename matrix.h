@@ -10,20 +10,18 @@ struct Mat
 {
 	int row;
 	int column;
-	
-	
+	double ** r[row];
 }
 
+void Matrix();
+Matrix NewMatrix(int row, int column);
 
-
-Matrix Add(Matrix A, Matrix B);
-Matrix Sub(Matrix A, Matrix B);
-Matrix Mutli(Matrix A, Matrix B);
-Matrix Inv(Matrix A);
+void Add(Matrix A, Matrix B, Matrix Result);
+void Sub(Matrix A, Matrix B, Matrix Result);
+void Mutli(Matrix A, Matrix B, Matrix Result);
+void Inv(Matrix A, Matrix Result);
+double Adj(Matrix A, int row, int column, Matrix Result);
 double Det(Matrix A);
-
-
-void Matrix(void);
 
 
 

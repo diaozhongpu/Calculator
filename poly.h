@@ -1,7 +1,7 @@
 #ifndef _poly_h
 #define _poly_h
 
-//linked list implementation of stakes
+
 struct polynode;
 typedef struct polynode *ptpn;
 
@@ -23,6 +23,12 @@ struct linkedlistp
 ptpn NewNode(void);
 Listp NewListp(void);
 ptpn Takep(Listp L);
+
+/*
+ * Function: AddByTime();
+ * Add new element to an existing list according to its time,
+ * in order to sustain a rising order.
+ */
 void AddByTime(Listp L, double coefficient, double time);
 int IsEmptyLp(Listp L);
 void Deletep(Listp L);
