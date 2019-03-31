@@ -3,24 +3,26 @@
 
 //linked list implementation of stakes
 struct Mat;
-typedef Mat *ptm;
+typedef struct Mat *ptm;
 typedef ptm Matrix;
 
 struct Mat
 {
 	int row;
 	int column;
-	double ** r[row];
-}
+	double ** num;
+};
 
-void Matrix();
+void MatrixP(void);
 Matrix NewMatrix(int row, int column);
+Matrix InputMatrix(void);
+void PrintMatrix(Matrix Result);
 
-void Add(Matrix A, Matrix B, Matrix Result);
-void Sub(Matrix A, Matrix B, Matrix Result);
-void Mutli(Matrix A, Matrix B, Matrix Result);
-void Inv(Matrix A, Matrix Result);
-double Adj(Matrix A, int row, int column, Matrix Result);
+Matrix AddM(Matrix A, Matrix B);
+Matrix Sub(Matrix A, Matrix B);
+Matrix Mutli(Matrix A, Matrix B);
+Matrix Inv(Matrix A);
+Matrix Adj(Matrix A, int row, int column);
 double Det(Matrix A);
 
 

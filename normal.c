@@ -10,7 +10,6 @@
 
 void Normal()
 {
-	int i=0;
 	double inputnum, result, a, b;
 	double *ptinputnum=&inputnum, *ptresult=&result, *pta=&a, *ptb=&b;
 			/*
@@ -184,10 +183,7 @@ void Normal()
 					}
 					else
 					{
-						printf("Position:%d",ptinputnum);
-						printf("BeforePack: %lf",*(double*)ptinputnum);
 						*ptinputnum=10.0*(*ptinputnum)+(double)(*ptinputchar-'0');
-						printf("Pack: %lf; %d times",*(double*)ptinputnum,i++);
 					}
 					AddTail(Output,ptinputnum,0);
 				}
@@ -195,7 +191,6 @@ void Normal()
 				{
 					*ptinputnum=(*ptinputchar-'0');
 					Add(Output,ptinputnum,0);
-					printf("Stack: %lf",*(double*)ptinputnum);
 				}
 				free(ptinputchar);
 				ifnum=1;
@@ -352,11 +347,8 @@ void Normal()
 		}
 		else
 		{
-			printf("---");
 			ptinputnum=(double*)Take(Output);
-			printf("add to output: %lf",*(double*)ptinputnum);
 			Push(Number, ptinputnum, 0);
-			printf("Pro: %d",ptinputnum);
 		}	
 	}
 	
@@ -488,6 +480,7 @@ void Add(List L, void *ele, int type)
 void AddTail(List L, void *ele, int type)
 {
 	L->tail->obj=ele;
+	L->tail->type=type;
 }
 
 int IsEmptyL(List L)

@@ -23,7 +23,7 @@ int main()
 	{
 		case 1: Normal(); break;
 		case 2: Poly(); break;
-		case 3: Matrix(); break;
+		case 3: MatrixP(); break;
 		default: break;
 	}
 	
