@@ -34,6 +34,11 @@ void Normal()
 			 * The Stack used to tempararily store input Number and Character
 			 * before all of them is passed to the Output List.
 			 */
+	List SinS, CosS, LogS, ExpS;
+			/*
+			 * These Stacks are used to store numbers and operators inside a 
+			 * function expression.
+			 */
 	List Output;
 			/*
 			 * The List used to store output reverse Polish expression.
@@ -70,12 +75,10 @@ void Normal()
 			 */
 				if(IsEmpty(Character))
 				{
-					printf("[if]");
 					Push(Character,ptinputchar,1);
 				}
 				else
 				{
-					printf("[else]");
 					while(!IsEmpty(Character))
 					{
 						ptcurchar=Pop(Character);
@@ -91,7 +94,6 @@ void Normal()
 					}
 					Push(Character,ptinputchar,1);
 				}
-				printf("[+]");
 				ifnum=0;
 				ifpoint=0;
 				break;
@@ -102,12 +104,10 @@ void Normal()
 			 */
 				if(IsEmpty(Character))
 				{
-					printf("[if*]");
 					Push(Character,ptinputchar,1);
 				}
 				else
 				{
-					printf("[else*]");
 					while(!IsEmpty(Character))
 					{
 						ptcurchar=Pop(Character);
@@ -220,65 +220,26 @@ void Normal()
 			}
 			
 			
-			/*
-			The part supportting function still needs fixing.
+			
 			case 's':
-				ptinputnum=(double*)malloc(sizeof(double));
-				if(ifnum)
-				{
-					ptinputnum=TakeTail(Output);
-					ptinputnum*=sin(*ptinputchar-'0');
-					AddTail(Output,ptinputnum,0);
-				}
-				else
-				{
-					*ptinputnum=sin(*ptinputchar-'0');
-					Add(Output,ptinputnum,0);
-				}
+				SinS=NewList();
+				SinS=InputSin(SinS, Output);
 				break;
 			case 'c':
-				ptinputnum=(double*)malloc(sizeof(double));
-				if(ifnum)
-				{
-					ptinputnum=TakeTail(Output);
-					ptinputnum*=cos(*ptinputchar-'0');
-					AddTail(Output,ptinputnum,0);
-				}
-				else
-				{
-					*ptinputnum=cos(*ptinputchar-'0');
-					Add(Output,ptinputnum,0);
-				}
+				CosS=NewList();
+				CosS=InputCos(CosS, Output);
 				break;
 			case 'l':
-				ptinputnum=(double*)malloc(sizeof(double));
-				if(ifnum)
-				{
-					ptinputnum=TakeTail(Output);
-					ptinputnum*=log(*ptinputchar-'0');
-					AddTail(Output,ptinputnum,0);
-				}
-				else
-				{
-					*ptinputnum=log(*ptinputchar-'0');
-					Add(Output,ptinputnum,0);
-				}
+				LogS=NewList();
+				LogS=InputLog(LogS, Output);
 				break;
 			case 'e':
-				ptinputnum=(double*)malloc(sizeof(double));
-				if(ifnum)
-				{
-					ptinputnum=TakeTail(Output);
-					ptinputnum*=exp(*ptinputchar-'0');
-					AddTail(Output,ptinputnum,0);
-				}
-				else
-				{
-					*ptinputnum=exp(*ptinputchar-'0');
-					Add(Output,ptinputnum,0);
-				}
+				ExpS=NewList();
+				ExpS=InputExp(ExpS, Output);
+				break;
 
-			*/
+
+			
 			
 			case '\n': 
 				while(!IsEmpty(Character))
@@ -304,8 +265,12 @@ void Normal()
 	while(!IsEmptyL(Output))
 	{
 		ptinputnum=(double*)malloc(sizeof(double)); 
-		if(Output->head->type)
+		switch(Output->head->type)
 		{
+			case 1:	
+				/*
+				 * If the object is a operator.
+				 */
 			ptinputchar=Take(Output);
 			switch(*(char*)ptinputchar)
 			{
@@ -344,12 +309,59 @@ void Normal()
 					printf("WRONG!"); 
 					break;
 			}
-		}
-		else
-		{
+			break;
+
+			case 0:
+				/*
+				 * If the object is a number.
+				 */
 			ptinputnum=(double*)Take(Output);
 			Push(Number, ptinputnum, 0);
-		}	
+			break;
+
+			case 2:
+				/*
+				 * The object is an sin function-indicator.
+				 */
+			SinS=Take(Output);
+			*ptinputnum=CauculateInverse (SinS);
+			*ptinputnum=sin(*ptinputnum);
+			Push(Number, ptinputnum, 0);
+			break;
+			
+			case 3:
+				/*
+				 * The object is an cos function-indicator.
+				 */
+			CosS=Take(Output);
+			*ptinputnum=CauculateInverse (CosS);
+			*ptinputnum=cos(*ptinputnum);
+			Push(Number, ptinputnum, 0);
+			break;
+			
+			case 4:
+				/*
+				 * The object is an log function-indicator.
+				 */
+			LogS=Take(Output);
+			*ptinputnum=CauculateInverse (LogS);
+			*ptinputnum=log(*ptinputnum);
+			Push(Number, ptinputnum, 0);
+			break;
+			
+			case 5:
+				/*
+				 * The object is an exp function-indicator.
+				 */
+			ExpS=Take(Output);
+			*ptinputnum=CauculateInverse (ExpS);
+			*ptinputnum=exp(*ptinputnum);
+			Push(Number, ptinputnum, 0);
+			break;
+			
+			//pow remains to be modified
+			
+		}
 	}
 	
 	ptresult=(double*)Pop(Number);
@@ -497,4 +509,445 @@ void Delete(List L)
 		L->head=L->head->next;
 		free(temp); 
 	}
+}
+
+
+List InputSin(List SinS, List Output)
+{
+	char a;
+	scanf("%c",&a);
+	if(a=='i')
+	{
+		;
+	}
+	else
+	{
+		return NULL;
+	}
+	scanf("%c",&a);
+	if(a=='n')
+	{
+		;
+	}
+	else
+	{
+		return NULL;
+	}
+	TurnToInverse (SinS);
+	Add(Output, SinS, 2);
+	SinS=NewList();
+	return SinS;
+	
+}
+
+List InputCos(List CosS, List Output)
+{
+	char a;
+	scanf("%c",&a);
+	if(a=='o')
+	{
+		;
+	}
+	else
+	{
+		return NULL;
+	}
+	scanf("%c",&a);
+	if(a=='s')
+	{
+		;
+	}
+	else
+	{
+		return NULL;
+	}
+	TurnToInverse (CosS);
+	Add(Output, CosS, 3);
+	CosS=NewList();
+	return CosS;
+	
+}
+
+List InputLog(List LogS, List Output)
+{
+	char a;
+	scanf("%c",&a);
+	if(a=='o')
+	{
+		;
+	}
+	else
+	{
+		return NULL;
+	}
+	scanf("%c",&a);
+	if(a=='g')
+	{
+		;
+	}
+	else
+	{
+		return NULL;
+	}
+	TurnToInverse (LogS);
+	Add(Output, LogS, 4);
+	LogS=NewList();
+	return LogS;
+	
+}
+
+List InputExp(List ExpS, List Output)
+{
+	char a;
+	scanf("%c",&a);
+	if(a=='x')
+	{
+		;
+	}
+	else
+	{
+		return NULL;
+	}
+	scanf("%c",&a);
+	if(a=='p')
+	{
+		;
+	}
+	else
+	{
+		return NULL;
+	}
+	TurnToInverse (ExpS);
+	Add(Output, ExpS, 5);
+	ExpS=NewList();
+	return ExpS;
+	
+}
+
+void TurnToInverse (List Output)
+{
+	double inputnum, result;
+	double *ptinputnum=&inputnum, *ptresult=&result;
+	int ifnum=0,ifpoint=0,ifinput=1;
+	char inputchar, curchar;
+	char *ptinputchar=&inputchar, *ptcurchar=&curchar;
+	Stack Character;
+	List SinS, CosS, LogS, ExpS;
+	Character=NewStack();
+	
+	while(ifinput)
+			/*
+			 * Tthe code will be executed if there are still input.
+			 */
+	{
+		ptinputchar=(char*)malloc(sizeof(char)); 
+		scanf("%c",ptinputchar);
+		switch(*ptinputchar)
+		{
+			case '+': case '-':
+			/*
+			 * Execute when '+' or '-' is taken in
+			 * When no previous operator is stored in Character Stack,
+			 * it will pop two numbers in the Number Stack, and store them in
+			 * the output correspondingly. Meaning the '+'/'-' operator will 
+			 * act on them. 
+			 * Otherwise, the operator with higher precedence will be precess
+			 * first.
+			 */
+				if(IsEmpty(Character))
+				{
+					Push(Character,ptinputchar,1);
+				}
+				else
+				{
+					while(!IsEmpty(Character))
+					{
+						ptcurchar=Pop(Character);
+						if(*ptcurchar=='(')
+						{
+							Push(Character,ptcurchar,1);
+							break;
+						}
+						else
+						{
+							Add(Output,ptcurchar,1);
+						}
+					}
+					Push(Character,ptinputchar,1);
+				}
+				ifnum=0;
+				ifpoint=0;
+				break;
+			case '*': case '/': 
+			/*
+			 * Execute when '*' or '/' is taken in.
+			 * Similiar to case '+' and case '/'.
+			 */
+				if(IsEmpty(Character))
+				{
+					Push(Character,ptinputchar,1);
+				}
+				else
+				{
+					while(!IsEmpty(Character))
+					{
+						ptcurchar=Pop(Character);
+						if(*ptcurchar=='('||*ptcurchar=='+'||*ptcurchar=='-')
+						{
+							Push(Character,ptcurchar,1);
+							break;
+						}
+						else
+						{
+							Add(Output,ptcurchar,1);
+						}
+					}
+					Push(Character,ptinputchar,1);
+				}
+				ifnum=0;
+				ifpoint=0;
+				break;
+			case '(': 
+				Push(Character,ptinputchar,1);
+				ifnum=0;
+				ifpoint=0;
+				break;
+			case ')': 
+			/*
+			 * Execute when ')' is taken in.
+			 * '(' will only pair with '('
+			 */
+				if(IsEmpty(Character))
+				{
+					return;
+				}
+				else
+				{
+					while(!IsEmpty(Character))
+					{
+						ptcurchar=Pop(Character);
+						if(*ptcurchar=='(')
+						{
+							if(IsEmpty(Character))
+							{
+								return;
+							}
+							/*
+							 * determine whether this function expression is ended.
+							 */
+							break;
+						}
+						else
+						{
+							Add(Output,ptcurchar,1);
+						}
+					}
+					return;
+				}
+				ifnum=0;
+				ifpoint=0;
+				break;
+			
+			
+			
+			case '0': case '1': case '2': case '3': case '4':
+			case '5': case '6': case '7': case '8': case '9':
+			/*
+			 * Execute when a number is taken in.
+			 * When no previous operator is stored in Character Stack,
+			 * it will pop two numbers in the Number Stack, and store them in
+			 * the output correspondingly. Meaning the '+'/'-' operator will 
+			 * act on them. 
+			 * Otherwise, the operator with higher precedence will be precess
+			 * first.
+			 */
+				ptinputnum=(double*)malloc(sizeof(double));
+				if(ifnum)
+				{
+					ptinputnum=TakeTail(Output);
+					if(ifpoint<0)
+					{
+						*ptinputnum+=(*ptinputchar-'0')*pow(10,ifpoint);
+						ifpoint--;
+					}
+					else
+					{
+						*ptinputnum=10.0*(*ptinputnum)+(double)(*ptinputchar-'0');
+					}
+					AddTail(Output,ptinputnum,0);
+				}
+				else
+				{
+					*ptinputnum=(*ptinputchar-'0');
+					Add(Output,ptinputnum,0);
+				}
+				free(ptinputchar);
+				ifnum=1;
+				break;
+				
+			case '.': 
+				ptinputnum=(double*)malloc(sizeof(double));
+				if(ifpoint)
+				{
+					;
+				}
+				else
+				{
+					if(ifnum)
+					{
+						ifpoint=-1;
+					}
+					else
+					{
+						*ptinputnum=0;
+						Add(Output,ptinputnum,0);
+						ifnum=1;
+						ifpoint=-1;
+					}
+				}
+				break;
+			
+			case 's':
+				SinS=NewList();
+				SinS=InputSin(SinS, Output);
+				break;
+			case 'c':
+				CosS=NewList();
+				CosS=InputCos(CosS, Output);
+				break;
+			case 'l':
+				LogS=NewList();
+				LogS=InputLog(LogS, Output);
+				break;
+			case 'e':
+				ExpS=NewList();
+				ExpS=InputExp(ExpS, Output);
+				break;
+
+
+			default:
+				break;
+		}
+	}
+	return;
+}
+
+double CauculateInverse (List Output)
+{
+	Stack Number;
+	List SinS, CosS, LogS, ExpS;
+	double inputnum, result, a, b;
+	double *ptinputnum=&inputnum, *ptresult=&result, *pta=&a, *ptb=&b;
+	int ifnum=0,ifpoint=0,ifinput=1;
+	char inputchar, curchar;
+	char *ptinputchar=&inputchar, *ptcurchar=&curchar;
+
+	Number=NewStack();
+	
+	ptinputchar=(char*)malloc(sizeof(char)); 
+	while(!IsEmptyL(Output))
+	{
+		ptinputnum=(double*)malloc(sizeof(double)); 
+		switch(Output->head->type)
+		{
+			case 1:	
+					/*
+					 * If the object is a operator.
+					 */
+				ptinputchar=Take(Output);
+				switch(*(char*)ptinputchar)
+				{
+					case '+': 
+						pta=Pop(Number);
+						ptb=Pop(Number);
+						*ptinputnum=*pta+*ptb;
+						Push(Number, ptinputnum, 0);
+						break;
+					case '-': 
+						pta=Pop(Number);
+						ptb=Pop(Number);
+						*ptinputnum=*pta-*ptb;
+						Push(Number, ptinputnum, 0);
+						break;
+					case '*': 
+						pta=Pop(Number);
+						ptb=Pop(Number);
+						*ptinputnum=(*pta)*(*ptb);
+						Push(Number, ptinputnum, 0);
+						break;
+					case '/': 
+						pta=Pop(Number);
+						ptb=Pop(Number);
+						if(*pta)
+						{
+							*ptinputnum=(*ptb)/(*pta);
+							Push(Number, ptinputnum, 0);
+						}
+						else
+						{
+							printf("Cannot divided by ZERO!");
+						}
+						break;
+					default: 
+						printf("WRONG!"); 
+						break;
+				}
+				break;
+
+			case 0:
+					/*
+					 * If the object is a number.
+					 */
+				ptinputnum=(double*)Take(Output);
+				Push(Number, ptinputnum, 0);
+				break;
+
+			
+			case 2:
+					/*
+					 * The object is an sin function-indicator.
+					 */
+				SinS=Take(Output);
+				*ptinputnum=CauculateInverse (SinS);
+				*ptinputnum=sin(*ptinputnum);
+				Push(Number, ptinputnum, 0);
+				break;
+				
+			case 3:
+					/*
+					 * The object is an cos function-indicator.
+					 */
+				CosS=Take(Output);
+				*ptinputnum=CauculateInverse (CosS);
+				*ptinputnum=cos(*ptinputnum);
+				Push(Number, ptinputnum, 0);
+				break;
+				
+			case 4:
+					/*
+					 * The object is an log function-indicator.
+					 */
+				LogS=Take(Output);
+				*ptinputnum=CauculateInverse (LogS);
+				*ptinputnum=log(*ptinputnum);
+				Push(Number, ptinputnum, 0);
+				break;
+				
+			case 5:
+					/*
+					 * The object is an exp function-indicator.
+					 */
+				ExpS=Take(Output);
+				*ptinputnum=CauculateInverse (ExpS);
+				*ptinputnum=exp(*ptinputnum);
+				Push(Number, ptinputnum, 0);
+				break;
+								
+			
+		}
+	}
+	
+	
+	ptresult=(double*)Pop(Number);
+	return *ptresult;
 }
