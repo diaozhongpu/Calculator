@@ -242,7 +242,7 @@ void PrintPoly(Listp L)
 	Listp Temp=L;
 	while(!IsEmptyLp(L))
 	{
-		printf("%lf",L->head->coefficient);
+		printf("%.2lf",L->head->coefficient);
 		printf("x^%lf",L->head->time);
 		L->head=L->head->next;
 		if(!IsEmptyLp(L))
