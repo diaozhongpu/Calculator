@@ -29,10 +29,11 @@ void Normal()
 			 * ifinput: 1=there still input to be read, be set to 0 when a '\n'
 			 * is read in.
 			 */
-	Stack Number, Character;
+	Stack Character;
 			/*
-			 * The Stack used to tempararily store input Number and Character
+			 * The Stack used to tempararily store input character
 			 * before all of them is passed to the Output List.
+			 * At the modified version, Stack Number is deleted.
 			 */
 	List SinS, CosS, LogS, ExpS;
 			/*
@@ -258,117 +259,9 @@ void Normal()
 
 	DisposeStack(Character);
 
-	Number=NewStack();
-	Character=NewStack();
+	result=CauculateInverse(Output);
+	printf("Answer: %lf",result);
 	
-	ptinputchar=(char*)malloc(sizeof(char)); 
-	while(!IsEmptyL(Output))
-	{
-		ptinputnum=(double*)malloc(sizeof(double)); 
-		switch(Output->head->type)
-		{
-			case 1:	
-				/*
-				 * If the object is a operator.
-				 */
-			ptinputchar=Take(Output);
-			switch(*(char*)ptinputchar)
-			{
-				case '+': 
-					pta=Pop(Number);
-					ptb=Pop(Number);
-					*ptinputnum=*pta+*ptb;
-					Push(Number, ptinputnum, 0);
-					break;
-				case '-': 
-					pta=Pop(Number);
-					ptb=Pop(Number);
-					*ptinputnum=*pta-*ptb;
-					Push(Number, ptinputnum, 0);
-					break;
-				case '*': 
-					pta=Pop(Number);
-					ptb=Pop(Number);
-					*ptinputnum=(*pta)*(*ptb);
-					Push(Number, ptinputnum, 0);
-					break;
-				case '/': 
-					pta=Pop(Number);
-					ptb=Pop(Number);
-					if(*pta)
-					{
-						*ptinputnum=(*ptb)/(*pta);
-						Push(Number, ptinputnum, 0);
-					}
-					else
-					{
-						printf("Cannot divided by ZERO!");
-					}
-					break;
-				default: 
-					printf("WRONG!"); 
-					break;
-			}
-			break;
-
-			case 0:
-				/*
-				 * If the object is a number.
-				 */
-			ptinputnum=(double*)Take(Output);
-			Push(Number, ptinputnum, 0);
-			break;
-
-			case 2:
-				/*
-				 * The object is an sin function-indicator.
-				 */
-			SinS=Take(Output);
-			*ptinputnum=CauculateInverse (SinS);
-			*ptinputnum=sin(*ptinputnum);
-			Push(Number, ptinputnum, 0);
-			break;
-			
-			case 3:
-				/*
-				 * The object is an cos function-indicator.
-				 */
-			CosS=Take(Output);
-			*ptinputnum=CauculateInverse (CosS);
-			*ptinputnum=cos(*ptinputnum);
-			Push(Number, ptinputnum, 0);
-			break;
-			
-			case 4:
-				/*
-				 * The object is an log function-indicator.
-				 */
-			LogS=Take(Output);
-			*ptinputnum=CauculateInverse (LogS);
-			*ptinputnum=log(*ptinputnum);
-			Push(Number, ptinputnum, 0);
-			break;
-			
-			case 5:
-				/*
-				 * The object is an exp function-indicator.
-				 */
-			ExpS=Take(Output);
-			*ptinputnum=CauculateInverse (ExpS);
-			*ptinputnum=exp(*ptinputnum);
-			Push(Number, ptinputnum, 0);
-			break;
-			
-			//pow remains to be modified
-			
-		}
-	}
-	
-	ptresult=(double*)Pop(Number);
-	printf("Answer: %lf",*(double*)ptresult);
-	
-	DisposeStack(Character);
-	DisposeStack(Number);
 	Delete(Output);
 
 }
