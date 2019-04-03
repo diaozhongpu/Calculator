@@ -1,8 +1,9 @@
 /*
-* cauculator.c
-*
-*
-*/
+ * Project 1: Cauculator
+ * Coded by DIAO Zhongpu, 2019
+ * Submitted in partial fulfillment of the course
+ *   C Programming, 2019 Spring
+ */
 
 #include<stdio.h>
 #include<stdlib.h>

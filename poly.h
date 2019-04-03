@@ -24,6 +24,8 @@ ptpn NewNode(void);
 Listp NewListp(void);
 ptpn Takep(Listp L);
 
+void Poly(void);
+
 /*
  * Function: AddByTime();
  * Add new element to an existing list according to its time,
@@ -34,7 +36,9 @@ int IsEmptyLp(Listp L);
 void Deletep(Listp L);
 void PrintPoly(Listp L);
 
-void Poly(void);
+/*
+ * Function used to mutliply two polynomials.
+ */
 Listp MultiPoly(Listp Poly1, Listp Poly2);
 
 

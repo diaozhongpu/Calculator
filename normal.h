@@ -33,6 +33,8 @@ struct linkedlist
 	ptr tail;
 };
 
+void Normal(void);
+
 /*
  * Below are typical functions for Stack ADT.
  */
@@ -43,27 +45,6 @@ int IsEmpty(Stack S);
 void DisposeStack(Stack S);
 
 void *TopEle(Stack S);
-
-List InputSin(List SinS, List Output);
-List InputCos(List CosS, List Output);
-List InputLog(List LogS, List Output);
-List InputExp(List ExpS, List Output);
-List InputPow(List PowS, List Output);
-
-List CauSin(List SinS);
-List CauCos(List CosS);
-List CauLog(List LogS);
-List CauExp(List ExpS);
-List CauPow(List PowS);
-
-void TurnToInverse (List Output);
-double CauculateInverse (List Output);
-
-
-
-void Normal(void);
-
-
 
 /*
  * Below are typical functions for linked list ADT.
@@ -82,7 +63,27 @@ void AddTail(List L, void *ele, int type);
 int IsEmptyL(List L);
 void Delete(List L);
 
+/*
+ * Special functions used to make this application able to
+ * handle expreesion inside a function.
+ */
+List InputSin(List SinS, List Output);
+List InputCos(List CosS, List Output);
+List InputLog(List LogS, List Output);
+List InputExp(List ExpS, List Output);
+List InputPow(List PowS, List Output);
 
+List CauSin(List SinS);
+List CauCos(List CosS);
+List CauLog(List LogS);
+List CauExp(List ExpS);
+List CauPow(List PowS);
 
+/*
+ * Functions used to concstruct inverse expression and
+ * cauculate the value of this expression.
+ */
+void TurnToInverse (List Output);
+double CauculateInverse (List Output);
 
 #endif
